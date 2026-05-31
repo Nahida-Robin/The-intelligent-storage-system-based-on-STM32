@@ -19,6 +19,8 @@
 #define ERR_SPE     4
 #define CHA_OK      5
 #define STEP_RETURN 6
+#define CONFIRM     7
+#define RESELECT    8
 #define LEN_ERR    -1
 #define PWD_ERR    -2
 #define MEM_ERR    -3
@@ -126,45 +128,50 @@ int8_t Password_Select()
 {
 	Key = Matrix_GetNum();
 	
-	if(Key == 14)
+	switch(Key)
 	{
-		Password_Sel++;
-		if(Password_Sel>2){Password_Sel = 0;}
-		switch(Password_Sel)
-		{
-			case 0:
-				Password_Clear();
-				for(uint8_t i = 0; i < Password1_Length; i++)
+		case 11:
+				return CONFIRM;
+		case 13:
+				return RESELECT;
+		case 14:
+				Password_Sel++;
+				if(Password_Sel>2){Password_Sel = 0;}
+				switch(Password_Sel)
 				{
-					Password[i] = Password1[i];
-				}	
-				Password_Length = Password1_Length;
-				return STEP_OK;
-			case 1:
-				Password_Clear();
-				for(uint8_t i = 0; i < Password2_Length; i++)
-				{
-					Password[i] = Password2[i];
+					case 0:
+						Password_Clear();
+						for(uint8_t i = 0; i < Password1_Length; i++)
+						{
+							Password[i] = Password1[i];
+						}	
+						Password_Length = Password1_Length;
+						return STEP_OK;
+					case 1:
+						Password_Clear();
+						for(uint8_t i = 0; i < Password2_Length; i++)
+						{
+							Password[i] = Password2[i];
+						}
+						Password_Length = Password2_Length;
+						return STEP_OK;
+					case 2:
+						Password_Clear();
+						for(uint8_t i = 0; i < Password3_Length; i++)
+						{
+							Password[i] = Password3[i];
+						}
+						Password_Length = Password3_Length;
+						return STEP_OK;
+					default:
+						return ERR;
 				}
-				Password_Length = Password2_Length;
-				return STEP_OK;
-			case 2:
-				Password_Clear();
-				for(uint8_t i = 0; i < Password3_Length; i++)
-				{
-					Password[i] = Password3[i];
-				}
-				Password_Length = Password3_Length;
-				return STEP_OK;
+			case 16:
+				return STEP_RETURN;
 			default:
 				return ERR;
-		}
 	}
-	else if(Key == 16)
-	{
-		return STEP_RETURN;
-	}
-	return ERR;
+	
 }
 
 /**
@@ -347,10 +354,8 @@ int8_t Password_Vertify()
 				Userword[Userword_Index] = 0;				
 			}
 			return STEP_OK;
-		case 15:
 		case 16:
-		default:
-			return 0;
+			return STEP_RETURN;
 	}
 
 }
@@ -366,10 +371,10 @@ int8_t Password_Vertify()
 int8_t Password_Change()
 {
 	Key = Matrix_GetNum();
-	if(Vertify_State != 1)//认证状态下才可修改
-		{
-			return -1;
-		}
+//	if(Vertify_State != 1)//认证状态下才可修改
+//		{
+//			return -1;
+//		}
 	
 	switch(Key)
 	{
@@ -421,8 +426,6 @@ int8_t Password_Change()
 			return STEP_OK;
 		case 16:
 			return STEP_RETURN;
-		default:
-			return LEN_ERR;
 	}
 }
 

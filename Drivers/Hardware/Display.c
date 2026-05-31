@@ -53,6 +53,7 @@ void Display_ShowLockState(void)
 void Display_ShowLockFreq(void)
 {
 	OLED_ShowString(2, 1, "Freq:");
+	OLED_ShowString(2, 8, "     ");
 	OLED_ShowNum(2, 6, Succeses, 2);
 }
 
@@ -102,8 +103,8 @@ void Display_InputInt(void)
 {
 	OLED_Clear();
 	OLED_ShowString(1, 1, "Please Press");
-	OLED_ShowString(3, 1, "Press 11 To Confirm");
-	OLED_ShowString(4, 1, "Press 14 To Delete");
+	OLED_ShowString(3, 1, "11 To Confirm");
+	OLED_ShowString(4, 1, "14 To Delete");
 	
 }
 
@@ -115,6 +116,7 @@ void Display_InputInt(void)
 void Display_ShowInput(void)
 {
 	OLED_ShowNum(2, Userword_Index, Userword[Userword_Index - 1], 1);
+	OLED_ShowString(2, Userword_Index + 1, "     ");
 }
 
 /**
@@ -128,10 +130,10 @@ void Display_ShowOpen(void)
 	OLED_ShowString(1, 1, "Already Open");
 	HAL_Delay(500);
 	OLED_Clear();
-	OLED_ShowString(1, 1, "Press 13 To Select");
-	OLED_ShowString(2, 1, "Press 12 2 To Close");
-	OLED_ShowString(3, 1, "Press 14 To Change");
-	OLED_ShowString(4, 1, "Press 15 To View");
+	OLED_ShowString(1, 1, "13 To Select");
+	OLED_ShowString(2, 1, "12 To Close");
+	OLED_ShowString(3, 1, "14 To Change");
+	OLED_ShowString(4, 1, "15 To View");
 }
 
 /**
@@ -143,8 +145,8 @@ void Display_ChaInt(void)
 {
 	OLED_Clear();
 	OLED_ShowString(1, 1, "Press New PWD");
-	OLED_ShowString(3, 1, "Press 11 To Confirm");
-	OLED_ShowString(4, 1, "Press 14 To Delete");
+	OLED_ShowString(3, 1, "11 To Confirm");
+	OLED_ShowString(4, 1, "14 To Delete");
 }
 
 /**
@@ -154,7 +156,8 @@ void Display_ChaInt(void)
   */
 void Display_ShowChaPwd(void)
 {
-	OLED_ShowNum(2, 1, Password_Index, NewPassWord[Password_Index - 1]);
+	OLED_ShowNum(2, Password_Index, NewPassWord[Password_Index - 1], 1);
+	OLED_ShowString(2, Password_Index + 1, "   ");
 }
 
 /**
@@ -165,7 +168,7 @@ void Display_ShowChaPwd(void)
 void Display_ViewInt(void)
 {
 	OLED_Clear();
-	OLED_ShowString(1, 1, "Password records");
+	OLED_ShowString(1, 1, "Password recs");
 }
 
 /**
@@ -224,7 +227,7 @@ int8_t Display_ShowView(void)
 void Display_SelInt(void)
 {
 	OLED_Clear();
-	OLED_ShowString(1, 1, "Press 14 To Selexct");
+	OLED_ShowString(1, 1, "14 To Selexct");
 }
 
 /**
@@ -236,8 +239,8 @@ void Display_Showsel(void)
 {
 	OLED_Clear();
 	OLED_ShowString(1, 1, "Now Password");
-	OLED_ShowString(3, 1, "Press 11 To Confirm");
-	OLED_ShowString(4, 1, "Press 13 To Resel");
+	OLED_ShowString(3, 1, "11 To Confirm");
+	OLED_ShowString(4, 1, "13 To Resel");
 	uint8_t PW_Index = 0;
 	while(PW_Index < Password_Length)
 	{
@@ -254,7 +257,7 @@ void Display_Showsel(void)
 void Display_ShowSelErr(void)
 {
 	OLED_Clear();
-	OLED_ShowString(1, 1, "Password Sel Err");
+	OLED_ShowString(1, 1, "Sel Err");
 }
 
 /**

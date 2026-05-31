@@ -141,34 +141,65 @@ void VERTIFY_Task(void)
 {
 	int8_t Result = Password_Vertify();
 	
-	if(Result == 1)
+	switch(Result)
 	{
-		Display_ShowInput();
+		case 1:
+			Display_ShowInput();
+			break;
+		case 2:
+//			Lock_Open();
+			Vertify_State = 1;
+		  Display_ShowOK();
+		  State = STATE_OPEN;
+		  Display_ShowOpen();
+		  return;
+		case  6:
+			State = STATE_IDLE;
+			Display_ShowMainMenu();
+			break;
+		case -1:
+			Display_ShowLenErr();
+		  Display_InputInt();
+			break;
+		case -2:
+			Err_Check();
+		  Display_ShowPwdErr();
+		  Display_InputInt();
+			break;
+		case -3:
+			Display_ShowMemErr();
+		  Display_InputInt();
+			break;
 	}
-	else if(Result == 2)
-	{
-		Lock_Open();
-		Display_ShowOK();
-		State = STATE_OPEN;
-		Display_ShowOpen();
-		return;
-	}
-	else if(Result == -1)
-	{
-		Display_ShowLenErr();
-		Display_InputInt();
-	}
-	else if(Result == -2)
-	{
-		Err_Check();
-		Display_ShowPwdErr();
-		Display_InputInt();
-	}
-	else if(Result == -3)
-	{
-		Display_ShowMemErr();
-		Display_InputInt();
-	}
+	
+//	if(Result == 1)
+//	{
+//		Display_ShowInput();
+//	}
+//	else if(Result == 2)
+//	{
+//		Lock_Open();
+//		Display_ShowOK();
+//		State = STATE_OPEN;
+//		Display_ShowOpen();
+//		return;
+//	}
+//	else if(Result == -1)
+//	{
+//		Display_ShowLenErr();
+//		Display_InputInt();
+//	}
+//	else if(Result == -2)
+//	{
+//		Err_Check();
+//		Display_ShowPwdErr();
+//		Display_InputInt();
+//	}
+//	else if(Result == -3)
+//	{
+//		Display_ShowMemErr();
+//		Display_InputInt();
+//	}
 }
 
 /**
@@ -180,27 +211,55 @@ void OPEN_Task()
 {
 	uint8_t Key = Matrix_GetNum();
 	
-	if(Key == 12)
+	switch(Key)
 	{
-		Lock_Close();
-		State = STATE_IDLE;
-		Display_ShowMainMenu();
+		case 12:
+//			Lock_Close();
+			Vertify_State = 0;
+		  State = STATE_IDLE; 	
+		  Display_ShowMainMenu();
+			break;
+		case 13:
+			State = STATE_SEL;
+		  Display_SelInt();
+			break;
+		case 14:
+			State = STATE_CHAPWD;
+		  Display_ChaInt();
+			break;
+		case 15:
+			State = STATE_VIEW;	
+			Display_ViewInt();
+			break;
+		case 16:
+			State = STATE_VERTIFY;
+//			Lock_Close();
+			Vertify_State = 0;
+			Display_InputInt();
+			break;
 	}
-	else if(Key == 13)
-	{
-		State = STATE_SEL;
-		Display_SelInt();
-	}
-	else if(Key == 14)
-	{
-		State = STATE_CHAPWD;
-		Display_ChaInt();
-	}
-	else if(Key == 15)
-	{
-		State = STATE_VIEW;
-		Display_ViewInt();
-	}
+	
+//	if(Key == 12)
+//	{
+//		Lock_Close();
+//		State = STATE_IDLE;
+//		Display_ShowMainMenu();
+//	}
+//	else if(Key == 13)
+//	{
+//		State = STATE_SEL;
+//		Display_SelInt();
+//	}
+//	else if(Key == 14)
+//	{
+//		State = STATE_CHAPWD;
+//		Display_ChaInt();
+//	}
+//	else if(Key == 15)
+//	{
+//		State = STATE_VIEW;
+//		Display_ViewInt();
+//	}
 }
 
 /**
@@ -212,28 +271,49 @@ void CHAPWD_Task()
 {
 	int8_t Result = Password_Change();
 	
-	if(Result == 1)
+	switch(Result)
 	{
-		Display_ShowChaPwd();
-		return;
+		case 1:
+			Display_ShowChaPwd();
+		  return;
+		case 5:
+			Display_ShowChaOK();
+		  State = STATE_OPEN;
+		  Display_ShowOpen();
+		  break;
+		case -1:
+			Display_ShowChaErr();
+		  State = STATE_OPEN;
+		  Display_ShowOpen();
+		  break;
+		case 6:
+			State = STATE_OPEN;
+		  Display_ShowOpen();
+		  break;
 	}
-	else if(Result == 5)
-	{
-		Display_ShowChaOK();
-		State = STATE_OPEN;
-		Display_ShowOpen();
-	}
-	else if(Result == -1)
-	{
-		Display_ShowChaErr();
-		State = STATE_OPEN;
-		Display_ShowOpen();
-	}
-	else if(Result == 6)
-	{
-		State = STATE_OPEN;
-		Display_ShowOpen();
-	}
+	
+//	if(Result == 1)
+//	{
+//		Display_ShowChaPwd();
+//		return;
+//	}
+//	else if(Result == 5)
+//	{
+//		Display_ShowChaOK();
+//		State = STATE_OPEN;
+//		Display_ShowOpen();
+//	}
+//	else if(Result == -1)
+//	{
+//		Display_ShowChaErr();
+//		State = STATE_OPEN;
+//		Display_ShowOpen();
+//	}
+//	else if(Result == 6)
+//	{
+//		State = STATE_OPEN;
+//		Display_ShowOpen();
+//	}
 }
 
 /**
@@ -261,27 +341,42 @@ void VIEW_Task()
 void PWSEL_Task(void)
 {
 	int8_t Result = Password_Select();
-	
-	if(Result == 1)
+	switch(Result)
 	{
-		Display_Showsel();
-		uint8_t Key = Matrix_GetNum();
-		if(Key == 11)
-		{
+		case 1:
+			Display_Showsel();
+			break;
+		case 7:
 			State = STATE_OPEN;
-			Display_ShowOpen();
-		}
-		else if(Key == 13)
-		{
+		  Display_ShowOpen();
+			break;
+		case 8:
 			Display_SelInt();
-			return;
-		}
+		  return;
+		case 6:
+			State = STATE_OPEN;	
+		  Display_ShowOpen();
+			break;
 	}
-	else if(Result == 6)
-	{
-		State = STATE_OPEN;
-		Display_ShowOpen();
-	}
+//	if(Result == 1)
+//	{
+//		Display_Showsel();
+//	}
+//	else if(Result == 8)
+//	{
+//		State = STATE_OPEN;
+//		Display_ShowOpen();
+//	}
+//	else if(Result == 9)
+//	{
+//		Display_SelInt();
+//		return;
+//	}
+//	else if(Result == 6)
+//	{
+//		State = STATE_OPEN;
+//		Display_ShowOpen();
+//	}
 	
 }
 

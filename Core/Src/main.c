@@ -109,9 +109,9 @@ int main(void)
 //		HAL_Delay(200);
 //		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, 0);
 //		HAL_Delay(200);
-//		TaskDriver_Run();
-		uint8_t Key = Matrix_GetNum();
-		OLED_ShowNum(1, 1, Key, 2);
+		TaskDriver_Run();
+//		uint8_t Key = Matrix_GetNum();
+//		OLED_ShowNum(1, 1, Key, 2);
 //		HAL_Delay(1500);
     /* USER CODE END WHILE */
 
