@@ -134,11 +134,14 @@ void Serial_ShowRecord(void)
 	uint16_t Tm_Len = 0;
 	if(Read_Memory(Uw_Mem, 256, &Uw_Len, Tm_Mem, 64, &Tm_Len) == 1)
 	{
-		uint16_t Uw_Index, Tm_Index = 0;
+		uint16_t Uw_Index = 0;
+		uint16_t Tm_Index = 0;
 		uint8_t Rec_Num = 0;
 		if(Uw_Len == 0 || Tm_Len == 0)
 		{
-			printf("[Error]No Records");
+			printf("[Error]No Records\r\n");
+			printf("Records END\r\n");
+			return;
 		}
 		printf("[Records]\r\n");
 		while(Uw_Index < Uw_Len && Tm_Index < Tm_Len)
@@ -146,9 +149,9 @@ void Serial_ShowRecord(void)
 			uint8_t Hour = Tm_Mem[Tm_Index++];
 			uint8_t Min = Tm_Mem[Tm_Index++];
 			uint8_t Sec = Tm_Mem[Tm_Index++];
-			if(Tm_Index < Tm_Len && Tm_Mem[Tm_Len] == 'Z'){Tm_Index++;}
+			if(Tm_Index < Tm_Len && Tm_Mem[Tm_Index] == 'Z'){Tm_Index++;}
 			printf("Rec%d Time:%02d:%02d:%02d Pwd:", ++Rec_Num, Hour, Min, Sec);
-			
+
 			while(Uw_Index < Uw_Len && Uw_Mem[Uw_Index] != 'A')
 			{
 				printf("%d", Uw_Mem[Uw_Index++]);
@@ -159,7 +162,7 @@ void Serial_ShowRecord(void)
 	}
 	else
 	{
-		printf("[Error]Read Error");
+		printf("[Error]Read Error\r\n");
 	}
 	printf("Records END\r\n");
 }

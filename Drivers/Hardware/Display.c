@@ -185,12 +185,10 @@ int8_t Display_ShowView(void)
 	uint8_t Tm_Mem[64] = {0};
 	uint16_t Uw_Len = 0;
 	uint16_t Tm_Len = 0;
-	uint8_t Uw_Line = 2, Tm_Line = 2;
+	uint8_t Uw_Line = 2;
 	if(Read_Memory(Uw_Mem, 256, &Uw_Len, Tm_Mem, 64, &Tm_Len) == 1)
 	{
-		uint16_t Uw_Index, Tm_Index = 0;
-		uint8_t Tm_Id = 10;
-		uint8_t Uw_Id = 1;
+		uint16_t Uw_Index = 0, Tm_Index = 0;
 		if(Uw_Len == 0 || Tm_Len == 0)
 		{
 			OLED_Clear();
@@ -198,17 +196,36 @@ int8_t Display_ShowView(void)
 			HAL_Delay(300);
 			return -1;
 		}
-		while(Uw_Index < Uw_Len && Uw_Mem[Uw_Index] != 'A')
+		OLED_Clear();
+		OLED_ShowString(1, 1, "History:");
+		while(Uw_Index < Uw_Len && Tm_Index < Tm_Len && Uw_Line <= 4)
 		{
-			OLED_ShowNum(Uw_Line, Uw_Id++, Uw_Mem[Uw_Index++], 1);
-			if(Tm_Mem[Tm_Index] == 'Z'){Tm_Index++;Tm_Line++;}
-			if(Uw_Id == 9){Uw_Id = 1;}
-		}
-		while(Tm_Index < Tm_Len && Tm_Mem[Tm_Index] != 'Z')
-		{
-			OLED_ShowNum(Tm_Line, Tm_Id++, Tm_Mem[Tm_Index++], 1);
-			if(Uw_Index < Uw_Len && Uw_Mem[Uw_Index] == 'A'){Uw_Index++; Uw_Line++;}
-			if(Tm_Id == 16){Tm_Id = 10;}
+			uint8_t col = 1;
+			while(Uw_Index < Uw_Len && Uw_Mem[Uw_Index] != 'A')
+			{
+				OLED_ShowNum(Uw_Line, col++, Uw_Mem[Uw_Index++], 1);
+			}
+			if(Uw_Index < Uw_Len && Uw_Mem[Uw_Index] == 'A')
+			{
+				Uw_Index++; 
+			}
+			col = 10;
+			while(Tm_Index < Tm_Len && Tm_Mem[Tm_Index] != 'Z')
+			{
+				OLED_ShowNum(Uw_Line, col, Tm_Mem[Tm_Index], 2);
+				col += 2;
+				if(Tm_Index == 0 || Tm_Index == 1)
+				{
+					OLED_ShowString(Uw_Line, col, ":");
+					col++;
+				}
+				Tm_Index++;
+			}
+			if(Tm_Index < Tm_Len && Tm_Mem[Tm_Index] == 'Z')
+			{
+				Tm_Index++; 
+			}
+			Uw_Line++; 
 		}
 	}
 	else
