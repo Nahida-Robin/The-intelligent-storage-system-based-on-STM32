@@ -290,6 +290,7 @@ int8_t Password_Vertify()
 			}
 			else
 			{
+				Userword_Clear();
 				return LEN_ERR;
 			}
 		case 10:
@@ -300,6 +301,7 @@ int8_t Password_Vertify()
 			}
 			else
 			{
+				Userword_Clear();
 				return LEN_ERR;
 			}
 		case 11://确定
@@ -394,6 +396,7 @@ int8_t Password_Change()
 			}
 			else
 			{
+				NewPassword_Clear();
 				return LEN_ERR;
 			}
 		case 10:
@@ -404,6 +407,7 @@ int8_t Password_Change()
 			}
 			else
 			{
+				NewPassword_Clear();
 				return LEN_ERR;
 			}			
 		case 11://确定
