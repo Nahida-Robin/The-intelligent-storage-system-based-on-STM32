@@ -25,7 +25,15 @@ extern volatile uint8_t Password[PASSWORD_MAX_LENGTH];
 extern uint8_t Userword_Index;
 extern uint8_t Password_Index;
 extern uint8_t Password_Length;
+extern uint8_t Read_Flag;
 extern uint8_t View_Flag;
+extern uint8_t View_Pages;
+extern uint8_t View_Index;
+
+uint8_t UW_Memory[16][9] = {0};
+uint8_t TM_Memory[16][9] = {0};
+uint8_t UW_LEN = 0;
+uint8_t TM_LEN = 0;
 
 
 /**
@@ -172,23 +180,26 @@ void Display_ViewInt(void)
 }
 
 /**
-  *@brief 通过OLED显示历史密码
+  *@brief 读取历史密码
   *@param NULL
   *@retval -1 历史记录为空
   *         1 成功
   */
-int8_t Display_ShowView(void)
+int8_t Display_ReadView(void)
 {
-	if(View_Flag){return -1;}
-	View_Flag = 1;
+	if(Read_Flag){return -1;}
+	Read_Flag = 1;
 	uint8_t Uw_Mem[256] = {0};
 	uint8_t Tm_Mem[64] = {0};
 	uint16_t Uw_Len = 0;
 	uint16_t Tm_Len = 0;
-	uint8_t Uw_Line = 2;
+	uint8_t Uw_Line = 1;
+	uint8_t Tm_Line = 1;
 	if(Read_Memory(Uw_Mem, 256, &Uw_Len, Tm_Mem, 64, &Tm_Len) == 1)
 	{
-		uint16_t Uw_Index = 0, Tm_Index = 0;
+		UW_LEN = Uw_Len;
+		TM_LEN = Tm_Len;
+		uint8_t Uw_Index = 0, Tm_Index = 0;
 		if(Uw_Len == 0 || Tm_Len == 0)
 		{
 			OLED_Clear();
@@ -196,47 +207,29 @@ int8_t Display_ShowView(void)
 			HAL_Delay(300);
 			return -1;
 		}
-		if(Tm_Len > 12)
-		{
-			uint8_t skip_records = (Tm_Len / 4) - 3;
-			for(uint8_t i = 0; i < skip_records; i++)
-			{
-				while(Uw_Index < Uw_Len && Uw_Mem[Uw_Index] != 'A') Uw_Index++;
-				if(Uw_Index < Uw_Len) Uw_Index++;
-				while(Tm_Index < Tm_Len && Tm_Mem[Tm_Index] != 'Z') Tm_Index++;
-				if(Tm_Index < Tm_Len) Tm_Index++;
-			}
-		}
-		OLED_Clear();
-		OLED_ShowString(1, 1, "History:");
+		View_Pages = Tm_Len / 4 + 1;
 		while(Uw_Index < Uw_Len && Tm_Index < Tm_Len && Uw_Line <= 4)
 		{
-			uint8_t col = 1;
 			while(Uw_Index < Uw_Len && Uw_Mem[Uw_Index] != 'A')
 			{
-				OLED_ShowNum(Uw_Line, col++, Uw_Mem[Uw_Index++], 1);
+				UW_Memory[Uw_Line][Uw_Index] = Uw_Mem[Uw_Index];
+				Uw_Index++;
 			}
 			if(Uw_Index < Uw_Len && Uw_Mem[Uw_Index] == 'A')
 			{
-				Uw_Index++; 
+				UW_Memory[Uw_Line++][Uw_Index] = 'A';
+				Uw_Index = 0;
 			}
-			col = 10;
 			while(Tm_Index < Tm_Len && Tm_Mem[Tm_Index] != 'Z')
 			{
-				OLED_ShowNum(Uw_Line, col, Tm_Mem[Tm_Index], 2);
-				col += 2;
-				if(Tm_Index == 0 || Tm_Index == 1)
-				{
-					OLED_ShowString(Uw_Line, col, ":");
-					col++;
-				}
+				TM_Memory[Tm_Line][Tm_Index] = Tm_Mem[Tm_Index];
 				Tm_Index++;
 			}
 			if(Tm_Index < Tm_Len && Tm_Mem[Tm_Index] == 'Z')
 			{
-				Tm_Index++; 
+				TM_Memory[Tm_Line++][Tm_Index] = 'Z';
+				Tm_Index = 0; 
 			}
-			Uw_Line++; 
 		}
 	}
 	else
@@ -245,6 +238,52 @@ int8_t Display_ShowView(void)
 		OLED_ShowString(1, 1, "Read Error");
 	}
 	return 1;
+}
+
+/**
+  *@brief 通过OLED显示历史密码记录 可翻页
+  *@param NULL
+  *@retval NULL
+  */
+void Display_ShowHistory(void)
+{
+	if(View_Flag)return;
+	View_Flag = 1;
+	OLED_Clear();
+	OLED_ShowString(1, 1, "Record: Page:");
+	OLED_ShowNum(1, 14, View_Index, 1);
+	uint16_t Uw_Index = 0, Tm_Index = 0;
+	uint8_t U_Len = 0, T_Len = 0;
+	uint8_t UShow_Index = 0, TShow_Index = 0;
+	uint8_t Line = 2;
+	Uw_Index = (View_Index - 1) * 3;
+	Tm_Index = (View_Index - 1) * 3;	
+	U_Len = View_Index * 3;	
+	T_Len = View_Index * 3;	
+	while(Uw_Index < U_Len && Tm_Index < T_Len)
+	{
+		uint8_t U_Col = 1, T_Col = 10;
+		while(Uw_Index < U_Len && UW_Memory[Uw_Index][UShow_Index] != 'A')
+		{
+			OLED_ShowNum(Line, U_Col++, UW_Memory[Uw_Index][UShow_Index], 1);
+			UShow_Index++;
+		}
+		if(Uw_Index < Line && UW_Memory[Uw_Index][UShow_Index] == 'A')
+		{
+			Uw_Index++;
+		}
+		while(Tm_Index < T_Len && TM_Memory[Tm_Index][TShow_Index] != 'Z')
+		{
+			OLED_ShowNum(Line, T_Col, TM_Memory[Tm_Index][TShow_Index], 2);
+			T_Col += 2;
+			TShow_Index++;
+		}
+		if(Tm_Index < T_Len && TM_Memory[Tm_Index][TShow_Index] == 'Z')
+		{
+			Tm_Index++;
+		}
+		Line++;
+	}
 }
 
 /**

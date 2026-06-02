@@ -28,8 +28,11 @@ uint8_t Temph = 0;
 uint8_t Templ = 0;
 uint8_t Humih = 0;
 uint8_t Humil = 0;
-uint8_t View_Flag = 0;
 volatile uint8_t Sensor_Read_Flag = 0;
+uint8_t Read_Flag = 0;
+uint8_t View_Flag = 0;
+uint8_t View_Pages = 1;
+uint8_t View_Index = 1;
 
 typedef enum{
 	STATE_IDLE = 0,
@@ -323,15 +326,35 @@ void CHAPWD_Task()
   */
 void VIEW_Task()
 {
-	int8_t Result = Display_ShowView();
+	int8_t Result = Display_ReadView();
+	Display_ShowHistory();
 	uint8_t Key = Matrix_GetNum();
-	if(Key == 16)
+	switch(Key)
 	{
-		View_Flag = 0;
-		State = STATE_OPEN;
-		Display_ShowOpen();
+		case 11:
+			if(View_Pages >= 1 && View_Index < View_Pages)
+			{
+				View_Index++;
+				View_Flag = 0;
+				Display_ShowHistory();
+			}
+			break;
+		case 12:
+			if(View_Pages >= 1 && View_Index > 1)
+			{
+				View_Index--;
+				View_Flag = 0;
+				Display_ShowHistory();
+			}
+			break;
+		case 16:
+			Read_Flag = 0;
+		  State = STATE_OPEN;
+		  Display_ShowOpen();
+			break;
 	}
 }
+
 
 /**
   *@brief ÃÜÂëÑ¡Ôñº¯Êý
