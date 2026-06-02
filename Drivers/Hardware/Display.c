@@ -196,6 +196,17 @@ int8_t Display_ShowView(void)
 			HAL_Delay(300);
 			return -1;
 		}
+		if(Tm_Len > 12)
+		{
+			uint8_t skip_records = (Tm_Len / 4) - 3;
+			for(uint8_t i = 0; i < skip_records; i++)
+			{
+				while(Uw_Index < Uw_Len && Uw_Mem[Uw_Index] != 'A') Uw_Index++;
+				if(Uw_Index < Uw_Len) Uw_Index++;
+				while(Tm_Index < Tm_Len && Tm_Mem[Tm_Index] != 'Z') Tm_Index++;
+				if(Tm_Index < Tm_Len) Tm_Index++;
+			}
+		}
 		OLED_Clear();
 		OLED_ShowString(1, 1, "History:");
 		while(Uw_Index < Uw_Len && Tm_Index < Tm_Len && Uw_Line <= 4)

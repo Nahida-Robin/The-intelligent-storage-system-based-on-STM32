@@ -11,6 +11,7 @@
 - **状态机任务调度** — 简单的状态机任务驱动管理
 - **定时器** — TIM2、TIM3 外设配置
 - **串口通信** — USART1 串口通信
+- **纳西妲万岁** — Long Live Nahida
 
 ## 硬件平台
 
@@ -22,6 +23,8 @@
 | **开发环境** | Keil MDK-ARM (MDK-ARM) |
 | **配置工具** | STM32CubeMX |
 | **HAL 库** | STM32F4xx HAL 驱动 |
+| **OLED屏** | 使用0.96寸OLED，1.3寸X需+2，屏幕驱动使用江协科技的 |
+| **矩阵键盘** | 行序从下至上，列序从右到左 |
 
 ## 项目结构
 
@@ -32,21 +35,39 @@
 │   │   ├── gpio.h
 │   │   ├── tim.h
 │   │   ├── usart.h
-│   │   ├── Delay.h         # 延时相关
-│   │   └── TaskDriver.h    # 任务驱动
+│   │   ├── Delay.h
+│   │   └── TaskDriver.h 
 │   └── Src/                # 源文件 (.c)
 │       ├── main.c          # 主程序入口
 │       ├── gpio.c
 │       ├── tim.c
 │       ├── usart.c
-│       ├── Delay.c
-│       ├── TaskDriver.c
+│       ├── Delay.c         # 延时相关
+│       ├── TaskDriver.c    # 任务驱动
 │       ├── stm32f4xx_it.c
 │       ├── stm32f4xx_hal_msp.c
 │       └── system_stm32f4xx.c
-├── Drivers/                # STM32 HAL 驱动库
+├── Drivers/                #驱动库
 │   ├── STM32F4xx_HAL_Driver/
-│   └── CMSIS/
+│   ├── CMSIS/
+|   └── Hardware            #硬件驱动库
+|       ├──dht11.c          #DHT11驱动
+|       ├──dht11.h
+|       ├──Display.c        #二次封装库 用于OLED显示
+|       ├──Display.h
+|       ├──Matrix.c         #矩阵键盘驱动
+|       ├──Matrix.c
+|       ├──Nowtime.c        #用于获取系统当前时间
+|       ├──Nowtime.h
+|       ├──OLED.c           #OLED驱动-江协科技
+|       ├──OLED.h
+|       ├──OLED_Font.h      #OLED字库
+|       ├──Password.c       #密码相关驱动
+|       ├──Password.h
+|       ├──Serial.c         #串口驱动
+|       ├──Serial.h
+|       ├──StepMotor.c      #步进电机驱动
+|       └──StepMotor.h
 ├── MDK-ARM/                # Keil 工程文件
 ├── test.ioc                # STM32CubeMX 配置文件
 ├── keilkill.bat            # 清理 Keil 生成文件的脚本
@@ -95,4 +116,4 @@
 
 ## 许可证
 
-本项目基于 **MIT 许可证** 开源 — 详见 [LICENSE](LICENSE) 文件（如未包含，则默认 MIT）。
+本项目基于 **MIT 许可证** 开源 — 详见 [LICENSE](LICENSE) 文件。
