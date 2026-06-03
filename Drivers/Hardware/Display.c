@@ -30,10 +30,11 @@ extern uint8_t View_Flag;
 extern uint8_t View_Pages;
 extern uint8_t View_Index;
 
-uint8_t UW_Memory[16][9] = {0};
-uint8_t TM_Memory[16][9] = {0};
-uint8_t UW_LEN = 0;
-uint8_t TM_LEN = 0;
+volatile uint8_t UW_Memory[16][9] = {0};
+volatile uint8_t TM_Memory[16][9] = {0};
+volatile uint8_t UW_LEN = 0;
+volatile uint8_t TM_LEN = 0;
+volatile uint8_t Rec_Count = 0;
 
 
 /**
@@ -189,17 +190,30 @@ int8_t Display_ReadView(void)
 {
 	if(Read_Flag){return -1;}
 	Read_Flag = 1;
+	View_Flag = 0;
+	View_Index = 1;
+	Rec_Count = 0;
+	View_Pages = 1;
+	for(uint8_t i = 0; i < 16; i++)
+	{
+		for(uint8_t j = 0; j < 9; j++)
+		{
+			UW_Memory[i][j] = 0;
+			TM_Memory[i][j] = 0;
+		}
+	}
 	uint8_t Uw_Mem[256] = {0};
 	uint8_t Tm_Mem[64] = {0};
 	uint16_t Uw_Len = 0;
 	uint16_t Tm_Len = 0;
-	uint8_t Uw_Line = 1;
-	uint8_t Tm_Line = 1;
+	uint8_t Uw_Line = 0;
+	uint8_t Tm_Line = 0;
 	if(Read_Memory(Uw_Mem, 256, &Uw_Len, Tm_Mem, 64, &Tm_Len) == 1)
 	{
 		UW_LEN = Uw_Len;
 		TM_LEN = Tm_Len;
 		uint8_t Uw_Index = 0, Tm_Index = 0;
+		uint8_t Uw_Pos = 0, Tm_Pos = 0;
 		if(Uw_Len == 0 || Tm_Len == 0)
 		{
 			OLED_Clear();
@@ -207,35 +221,48 @@ int8_t Display_ReadView(void)
 			HAL_Delay(300);
 			return -1;
 		}
-		View_Pages = Tm_Len / 4 + 1;
-		while(Uw_Index < Uw_Len && Tm_Index < Tm_Len && Uw_Line <= 4)
+		while(Uw_Index < Uw_Len && Tm_Index < Tm_Len && Uw_Line < 16 && Tm_Line < 16)
 		{
-			while(Uw_Index < Uw_Len && Uw_Mem[Uw_Index] != 'A')
+			while(Uw_Index < Uw_Len && Uw_Mem[Uw_Index] != 'A' && Uw_Pos < 8)
 			{
-				UW_Memory[Uw_Line][Uw_Index] = Uw_Mem[Uw_Index];
+				UW_Memory[Uw_Line][Uw_Pos++] = Uw_Mem[Uw_Index];
 				Uw_Index++;
 			}
 			if(Uw_Index < Uw_Len && Uw_Mem[Uw_Index] == 'A')
 			{
-				UW_Memory[Uw_Line++][Uw_Index] = 'A';
-				Uw_Index = 0;
+				UW_Memory[Uw_Line++][Uw_Pos++] = 'A';
+				Uw_Index++;
+				Uw_Pos = 0;
 			}
-			while(Tm_Index < Tm_Len && Tm_Mem[Tm_Index] != 'Z')
+			else
 			{
-				TM_Memory[Tm_Line][Tm_Index] = Tm_Mem[Tm_Index];
+				break;
+			}
+			while(Tm_Index < Tm_Len && Tm_Mem[Tm_Index] != 'Z' && Tm_Pos < 8)
+			{
+				TM_Memory[Tm_Line][Tm_Pos++] = Tm_Mem[Tm_Index];
 				Tm_Index++;
 			}
 			if(Tm_Index < Tm_Len && Tm_Mem[Tm_Index] == 'Z')
 			{
-				TM_Memory[Tm_Line++][Tm_Index] = 'Z';
-				Tm_Index = 0; 
+				TM_Memory[Tm_Line++][Tm_Pos++] = 'Z';
+				Tm_Index++;
+				Tm_Pos = 0;
+			}
+			else
+			{
+				break;
 			}
 		}
+		Rec_Count = Uw_Line < Tm_Line ? Uw_Line : Tm_Line;
+		View_Pages = (Rec_Count + 2) / 3;
+		if(View_Pages == 0){View_Pages = 1;}
 	}
 	else
 	{
 		OLED_ShowString(1, 1, "                 ");
 		OLED_ShowString(1, 1, "Read Error");
+		return -1;
 	}
 	return 1;
 }
@@ -250,39 +277,38 @@ void Display_ShowHistory(void)
 	if(View_Flag)return;
 	View_Flag = 1;
 	OLED_Clear();
+	if(Rec_Count == 0)
+	{
+		OLED_ShowString(1, 1, "No Records");
+		return;
+	}
+	if(View_Index < 1){View_Index = 1;}
+	if(View_Index > View_Pages){View_Index = View_Pages;}
 	OLED_ShowString(1, 1, "Record: Page:");
 	OLED_ShowNum(1, 14, View_Index, 1);
-	uint16_t Uw_Index = 0, Tm_Index = 0;
-	uint8_t U_Len = 0, T_Len = 0;
-	uint8_t UShow_Index = 0, TShow_Index = 0;
+	uint8_t Rec_Index = 0;
+	uint8_t End_Index = 0;
 	uint8_t Line = 2;
-	Uw_Index = (View_Index - 1) * 3;
-	Tm_Index = (View_Index - 1) * 3;	
-	U_Len = View_Index * 3;	
-	T_Len = View_Index * 3;	
-	while(Uw_Index < U_Len && Tm_Index < T_Len)
+	Rec_Index = (View_Index - 1) * 3;
+	End_Index = View_Index * 3;
+	if(End_Index > Rec_Count){End_Index = Rec_Count;}
+	while(Rec_Index < End_Index)
 	{
 		uint8_t U_Col = 1, T_Col = 10;
-		while(Uw_Index < U_Len && UW_Memory[Uw_Index][UShow_Index] != 'A')
+		uint8_t UShow_Index = 0, TShow_Index = 0;
+		while(UShow_Index < 8 && UW_Memory[Rec_Index][UShow_Index] != 'A')
 		{
-			OLED_ShowNum(Line, U_Col++, UW_Memory[Uw_Index][UShow_Index], 1);
+			OLED_ShowNum(Line, U_Col++, UW_Memory[Rec_Index][UShow_Index], 1);
 			UShow_Index++;
 		}
-		if(Uw_Index < Line && UW_Memory[Uw_Index][UShow_Index] == 'A')
+		while(TShow_Index < 8 && TM_Memory[Rec_Index][TShow_Index] != 'Z')
 		{
-			Uw_Index++;
-		}
-		while(Tm_Index < T_Len && TM_Memory[Tm_Index][TShow_Index] != 'Z')
-		{
-			OLED_ShowNum(Line, T_Col, TM_Memory[Tm_Index][TShow_Index], 2);
+			OLED_ShowNum(Line, T_Col, TM_Memory[Rec_Index][TShow_Index], 2);
 			T_Col += 2;
 			TShow_Index++;
 		}
-		if(Tm_Index < T_Len && TM_Memory[Tm_Index][TShow_Index] == 'Z')
-		{
-			Tm_Index++;
-		}
 		Line++;
+		Rec_Index++;
 	}
 }
 

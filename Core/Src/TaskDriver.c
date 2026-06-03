@@ -174,35 +174,6 @@ void VERTIFY_Task(void)
 		  Display_InputInt();
 			break;
 	}
-	
-//	if(Result == 1)
-//	{
-//		Display_ShowInput();
-//	}
-//	else if(Result == 2)
-//	{
-//		Lock_Open();
-//		Display_ShowOK();
-//		State = STATE_OPEN;
-//		Display_ShowOpen();
-//		return;
-//	}
-//	else if(Result == -1)
-//	{
-//		Display_ShowLenErr();
-//		Display_InputInt();
-//	}
-//	else if(Result == -2)
-//	{
-//		Err_Check();
-//		Display_ShowPwdErr();
-//		Display_InputInt();
-//	}
-//	else if(Result == -3)
-//	{
-//		Display_ShowMemErr();
-//		Display_InputInt();
-//	}
 }
 
 /**
@@ -231,6 +202,9 @@ void OPEN_Task()
 		  Display_ChaInt();
 			break;
 		case 15:
+			Read_Flag = 0;
+			View_Flag = 0;
+			View_Index = 1;
 			State = STATE_VIEW;	
 			Display_ViewInt();
 			break;
@@ -241,28 +215,6 @@ void OPEN_Task()
 			Display_InputInt();
 			break;
 	}
-	
-//	if(Key == 12)
-//	{
-//		Lock_Close();
-//		State = STATE_IDLE;
-//		Display_ShowMainMenu();
-//	}
-//	else if(Key == 13)
-//	{
-//		State = STATE_SEL;
-//		Display_SelInt();
-//	}
-//	else if(Key == 14)
-//	{
-//		State = STATE_CHAPWD;
-//		Display_ChaInt();
-//	}
-//	else if(Key == 15)
-//	{
-//		State = STATE_VIEW;
-//		Display_ViewInt();
-//	}
 }
 
 /**
@@ -290,33 +242,13 @@ void CHAPWD_Task()
 		  Display_ShowOpen();
 		  break;
 		case 6:
+			Read_Flag = 0;
+			View_Flag = 0;
+			View_Index = 1;
 			State = STATE_OPEN;
 		  Display_ShowOpen();
 		  break;
 	}
-	
-//	if(Result == 1)
-//	{
-//		Display_ShowChaPwd();
-//		return;
-//	}
-//	else if(Result == 5)
-//	{
-//		Display_ShowChaOK();
-//		State = STATE_OPEN;
-//		Display_ShowOpen();
-//	}
-//	else if(Result == -1)
-//	{
-//		Display_ShowChaErr();
-//		State = STATE_OPEN;
-//		Display_ShowOpen();
-//	}
-//	else if(Result == 6)
-//	{
-//		State = STATE_OPEN;
-//		Display_ShowOpen();
-//	}
 }
 
 /**
@@ -381,26 +313,6 @@ void PWSEL_Task(void)
 		  Display_ShowOpen();
 			break;
 	}
-//	if(Result == 1)
-//	{
-//		Display_Showsel();
-//	}
-//	else if(Result == 8)
-//	{
-//		State = STATE_OPEN;
-//		Display_ShowOpen();
-//	}
-//	else if(Result == 9)
-//	{
-//		Display_SelInt();
-//		return;
-//	}
-//	else if(Result == 6)
-//	{
-//		State = STATE_OPEN;
-//		Display_ShowOpen();
-//	}
-	
 }
 
 /**

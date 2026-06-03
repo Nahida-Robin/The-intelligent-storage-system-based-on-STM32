@@ -3,9 +3,9 @@
 <title>Static Call Graph - [test\test.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image test\test.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Tue Jun 02 22:54:23 2026
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Wed Jun 03 20:00:12 2026
 <BR><P>
-<H3>Maximum Stack Usage =        480 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        488 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 main &rArr; TaskDriver_Run &rArr; VIEW_Task &rArr; Display_ReadView &rArr; OLED_ShowString &rArr; OLED_ShowChar &rArr; OLED_SetCursor &rArr; OLED_WriteCommand &rArr; OLED_I2C_SendByte &rArr; Delay_us
 <P>
@@ -454,7 +454,7 @@ Global Symbols
 <P><STRONG><a name="[4]"></a>BusFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.BusFault_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f407xx.o(RESET)
 </UL>
-<P><STRONG><a name="[69]"></a>CHAPWD_Task</STRONG> (Thumb, 84 bytes, Stack size 8 bytes, taskdriver.o(i.CHAPWD_Task))
+<P><STRONG><a name="[69]"></a>CHAPWD_Task</STRONG> (Thumb, 100 bytes, Stack size 8 bytes, taskdriver.o(i.CHAPWD_Task))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = CHAPWD_Task &rArr; Display_ShowChaPwd &rArr; OLED_ShowNum &rArr; OLED_ShowChar &rArr; OLED_SetCursor &rArr; OLED_WriteCommand &rArr; OLED_I2C_SendByte &rArr; Delay_us
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Password_Change
@@ -501,8 +501,8 @@ Global Symbols
 <LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IDLE_Task
 </UL>
 
-<P><STRONG><a name="[73]"></a>Display_ReadView</STRONG> (Thumb, 346 bytes, Stack size 360 bytes, display.o(i.Display_ReadView))
-<BR><BR>[Stack]<UL><LI>Max Depth = 456<LI>Call Chain = Display_ReadView &rArr; OLED_ShowString &rArr; OLED_ShowChar &rArr; OLED_SetCursor &rArr; OLED_WriteCommand &rArr; OLED_I2C_SendByte &rArr; Delay_us
+<P><STRONG><a name="[73]"></a>Display_ReadView</STRONG> (Thumb, 526 bytes, Stack size 368 bytes, display.o(i.Display_ReadView))
+<BR><BR>[Stack]<UL><LI>Max Depth = 464<LI>Call Chain = Display_ReadView &rArr; OLED_ShowString &rArr; OLED_ShowChar &rArr; OLED_SetCursor &rArr; OLED_WriteCommand &rArr; OLED_I2C_SendByte &rArr; Delay_us
 </UL>
 <BR>[Calls]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
@@ -560,8 +560,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IDLE_Task
 </UL>
 
-<P><STRONG><a name="[7a]"></a>Display_ShowHistory</STRONG> (Thumb, 292 bytes, Stack size 40 bytes, display.o(i.Display_ShowHistory))
-<BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = Display_ShowHistory &rArr; OLED_ShowNum &rArr; OLED_ShowChar &rArr; OLED_SetCursor &rArr; OLED_WriteCommand &rArr; OLED_I2C_SendByte &rArr; Delay_us
+<P><STRONG><a name="[7a]"></a>Display_ShowHistory</STRONG> (Thumb, 278 bytes, Stack size 32 bytes, display.o(i.Display_ShowHistory))
+<BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = Display_ShowHistory &rArr; OLED_ShowNum &rArr; OLED_ShowChar &rArr; OLED_SetCursor &rArr; OLED_WriteCommand &rArr; OLED_I2C_SendByte &rArr; Delay_us
 </UL>
 <BR>[Calls]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OLED_ShowString
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OLED_ShowNum
@@ -1327,7 +1327,7 @@ Global Symbols
 <LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OLED_Clear
 </UL>
 
-<P><STRONG><a name="[da]"></a>OPEN_Task</STRONG> (Thumb, 100 bytes, Stack size 8 bytes, taskdriver.o(i.OPEN_Task))
+<P><STRONG><a name="[da]"></a>OPEN_Task</STRONG> (Thumb, 116 bytes, Stack size 8 bytes, taskdriver.o(i.OPEN_Task))
 <BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = OPEN_Task &rArr; Display_ViewInt &rArr; OLED_ShowString &rArr; OLED_ShowChar &rArr; OLED_SetCursor &rArr; OLED_WriteCommand &rArr; OLED_I2C_SendByte &rArr; Delay_us
 </UL>
 <BR>[Calls]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Matrix_GetNum
@@ -1438,7 +1438,8 @@ Global Symbols
 <P><STRONG><a name="[e5]"></a>Serial_ProcessCmd</STRONG> (Thumb, 154 bytes, Stack size 8 bytes, serial.o(i.Serial_ProcessCmd))
 <BR><BR>[Stack]<UL><LI>Max Depth = 400<LI>Call Chain = Serial_ProcessCmd &rArr; Serial_ShowRecord &rArr; __2printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcmp
+<BR>[Calls]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
+<LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcmp
 <LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Serial_ShowWarning
 <LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Serial_ShowSuccess
 <LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Serial_ShowStatus
@@ -1447,7 +1448,6 @@ Global Symbols
 <LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Serial_ShowDHT
 <LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Serial_LockOpen
 <LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Serial_LockClose
-<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TaskDriver_Run
 </UL>
@@ -1475,9 +1475,9 @@ Global Symbols
 <P><STRONG><a name="[eb]"></a>Serial_ShowRecord</STRONG> (Thumb, 270 bytes, Stack size 368 bytes, serial.o(i.Serial_ShowRecord))
 <BR><BR>[Stack]<UL><LI>Max Depth = 392<LI>Call Chain = Serial_ShowRecord &rArr; __2printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
+<BR>[Calls]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
+<LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Read_Memory
-<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Serial_ProcessCmd
 </UL>
@@ -1603,7 +1603,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[f5]"></a>TaskDriver_Run</STRONG> (Thumb, 64 bytes, Stack size 8 bytes, taskdriver.o(i.TaskDriver_Run))
-<BR><BR>[Stack]<UL><LI>Max Depth = 480<LI>Call Chain = TaskDriver_Run &rArr; VIEW_Task &rArr; Display_ReadView &rArr; OLED_ShowString &rArr; OLED_ShowChar &rArr; OLED_SetCursor &rArr; OLED_WriteCommand &rArr; OLED_I2C_SendByte &rArr; Delay_us
+<BR><BR>[Stack]<UL><LI>Max Depth = 488<LI>Call Chain = TaskDriver_Run &rArr; VIEW_Task &rArr; Display_ReadView &rArr; OLED_ShowString &rArr; OLED_ShowChar &rArr; OLED_SetCursor &rArr; OLED_WriteCommand &rArr; OLED_I2C_SendByte &rArr; Delay_us
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Serial_ProcessCmd
 <LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VIEW_Task
@@ -1668,7 +1668,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[f7]"></a>VIEW_Task</STRONG> (Thumb, 134 bytes, Stack size 16 bytes, taskdriver.o(i.VIEW_Task))
-<BR><BR>[Stack]<UL><LI>Max Depth = 472<LI>Call Chain = VIEW_Task &rArr; Display_ReadView &rArr; OLED_ShowString &rArr; OLED_ShowChar &rArr; OLED_SetCursor &rArr; OLED_WriteCommand &rArr; OLED_I2C_SendByte &rArr; Delay_us
+<BR><BR>[Stack]<UL><LI>Max Depth = 480<LI>Call Chain = VIEW_Task &rArr; Display_ReadView &rArr; OLED_ShowString &rArr; OLED_ShowChar &rArr; OLED_SetCursor &rArr; OLED_WriteCommand &rArr; OLED_I2C_SendByte &rArr; Delay_us
 </UL>
 <BR>[Calls]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Matrix_GetNum
 <LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Display_ShowOpen
@@ -1713,7 +1713,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> printf6.o(i.__0printf$6)
 </UL>
 <P><STRONG><a name="[5b]"></a>main</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, main.o(i.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 480<LI>Call Chain = main &rArr; TaskDriver_Run &rArr; VIEW_Task &rArr; Display_ReadView &rArr; OLED_ShowString &rArr; OLED_ShowChar &rArr; OLED_SetCursor &rArr; OLED_WriteCommand &rArr; OLED_I2C_SendByte &rArr; Delay_us
+<BR><BR>[Stack]<UL><LI>Max Depth = 488<LI>Call Chain = main &rArr; TaskDriver_Run &rArr; VIEW_Task &rArr; Display_ReadView &rArr; OLED_ShowString &rArr; OLED_ShowChar &rArr; OLED_SetCursor &rArr; OLED_WriteCommand &rArr; OLED_I2C_SendByte &rArr; Delay_us
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART1_UART_Init
 <LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_TIM3_Init
